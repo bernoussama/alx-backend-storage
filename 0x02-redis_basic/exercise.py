@@ -8,7 +8,14 @@ import uuid
 
 
 class Cache:
+    """
+    class representing a cache
+    """
+
     def __init__(self):
+        """
+        initialize the cache
+        """
         self._redis = redis.Redis()
         self._redis.flushdb()
 
