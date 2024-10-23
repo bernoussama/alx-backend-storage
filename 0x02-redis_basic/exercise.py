@@ -2,6 +2,7 @@
 """
 exercise
 """
+from typing import Union
 import redis
 import uuid
 
@@ -11,7 +12,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
-    def store(self, data: bytes | str | int | float) -> str:
+    def store(self, data: Union[bytes, str, int, float]) -> str:
         """
         Store data in the cache
         """
