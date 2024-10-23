@@ -38,20 +38,20 @@ def count_calls(method: Callable) -> Callable:
     """Tracks the number of calls made to a method"""
 
     @wraps(method)
-    def invoker(self, *args, **kwargs) -> Any:
+    def wrapper(self, *args, **kwargs) -> Any:
         """Invokes the given method after tracking it"""
         if isinstance(self._redis, redis.Redis):
             self._redis.incr(method.__qualname__)
         return method(self, *args, **kwargs)
 
-    return invoker
+    return wrapper
 
 
 def call_history(method: Callable) -> Callable:
     """Tracks the call details of a method"""
 
     @wraps(method)
-    def invoker(self, *args, **kwargs) -> Any:
+    def wrapper(self, *args, **kwargs) -> Any:
         """Returns the method's output after storing its details"""
         in_key = "{}:inputs".format(method.__qualname__)
         out_key = "{}:outputs".format(method.__qualname__)
@@ -62,7 +62,7 @@ def call_history(method: Callable) -> Callable:
             self._redis.rpush(out_key, output)
         return output
 
-    return invoker
+    return wrapper
 
 
 class Cache:
