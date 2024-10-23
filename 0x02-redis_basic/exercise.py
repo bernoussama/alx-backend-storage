@@ -2,7 +2,7 @@
 """
 exercise
 """
-from typing import Union
+from typing import Callable, Union
 import redis
 import uuid
 
@@ -26,3 +26,12 @@ class Cache:
         random_key = str(uuid.uuid4())
         self._redis.set(random_key, data)
         return random_key
+
+    def get(
+        self,
+        key: str,
+        fn: Callable = None,
+    ) -> Union[str, bytes, int, float]:
+        """Retrieves a value from Redis Cache"""
+        data = self._redis.get(key)
+        return fn(data) if fn is not None else data
